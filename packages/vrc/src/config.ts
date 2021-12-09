@@ -40,14 +40,6 @@ export function resolveAppConfig(cb: T.IPluginCallback): T.UserConfigExport {
       }),
       react(),
     ],
-    css: {
-      preprocessorOptions: {
-        less: {
-          modifyVars: resolveTheme(),
-          javascriptEnabled: true,
-        },
-      },
-    },
   };
 }
 

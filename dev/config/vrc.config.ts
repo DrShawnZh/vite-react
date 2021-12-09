@@ -1,9 +1,11 @@
 import routes from "./routes.config";
+import theme from './theme.config';
 
 export default {
   root: ".varc/index.html",
   history: "browser",
   routes,
+  theme,
   build: {
     dynamicImportVarsOptions: {
       excludes: ["src/**/*"],

@@ -1,5 +1,7 @@
+import "./index.less";
+
 const TC = () => {
-  return <div>ces111111</div>
+  return <div className="text">ces111111</div>
 }
 
 export default TC
