@@ -4,6 +4,13 @@
   "description": "",
   "main": "dist/index.js",
   "type": "commonjs",
+  "files": [
+    "bin",
+    "dist",
+    "package.json",
+    "tsconfig.json",
+    "lib"
+  ],
   "scripts": {
     "build-bundle": "rm -rf ./dist && rollup -c rollup.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
