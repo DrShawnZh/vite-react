@@ -9,6 +9,7 @@ import vitePluginImport from "vite-plugin-babel-import";
 import resolveTheme from "./css";
 import viteStyleImport, { AntdResolve } from "vite-plugin-style-import";
 import RenderFromConfigPlugin from "./plugins/config";
+import TransCssFile from './plugins/css';
 
 export function resolveAppConfig(cb: T.IPluginCallback): T.UserConfigExport {
   return {
@@ -16,6 +17,7 @@ export function resolveAppConfig(cb: T.IPluginCallback): T.UserConfigExport {
       RenderFromConfigPlugin({
         routerCallback: cb.configPluginCallback.routerCallback,
       }),
+      // TransCssFile(),
       // vitePluginImport([
       //   {
       //     libraryName: "antd",

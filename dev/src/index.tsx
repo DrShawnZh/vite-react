@@ -1,7 +1,13 @@
-import "./index.less";
+import styles from "./index.module.less";
+
+console.log(styles);
 
 const TC = () => {
-  return <div className="text">ces111111</div>
-}
+  return (
+    <div className={styles.text}>
+      <span className={styles["text-inner"]}>cessa</span>
+    </div>
+  );
+};
 
-export default TC
+export default TC;
