@@ -1,9 +1,9 @@
-34 error Error: Command failed with exit code 1: git add -- packages/create-vrc/package.json packages/create-vrc/package-lock.json packages/rebuild/package.json packages/rebuild/package-lock.json packages/vrc/package.json
-34 error The following paths are ignored by one of your .gitignore files:
-34 error packages/create-vrc/package-lock.json
-34 error packages/rebuild/package-lock.json
-34 error Use -f if you really want to add them.
-34 error     at makeError (/Users/zhangxiang/projects/vite-react/node_modules/execa/lib/error.js:60:11)
-34 error     at handlePromise (/Users/zhangxiang/projects/vite-react/node_modules/execa/index.js:118:26)
-34 error     at processTicksAndRejections (internal/process/task_queues.js:95:5)
-34 error     at async Promise.all (index 0)
+36 error Error: Command failed with exit code 1: git commit -F /private/var/folders/2z/m6c201ls0nl7btfn6_8wlfsh0000gn/T/06a22465-d716-4b4a-95bd-a6e317d8c709/lerna-commit.txt
+36 error On branch main
+36 error Your branch is up to date with 'origin/main'.
+36 error
+36 error nothing to commit, working tree clean
+36 error     at makeError (/Users/zhangxiang/projects/vite-react/node_modules/execa/lib/error.js:60:11)
+36 error     at handlePromise (/Users/zhangxiang/projects/vite-react/node_modules/execa/index.js:118:26)
+36 error     at processTicksAndRejections (internal/process/task_queues.js:95:5)
+36 error     at async Promise.all (index 0)
