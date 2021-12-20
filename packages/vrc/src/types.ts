@@ -6,7 +6,7 @@ export type PartialViteConfig = Partial<ResolvedConfig>;
 
 export interface VrxConfig extends PartialViteConfig {}
 
-export { IRoute } from "@varc/rebuild/dist/render-router/types";
+export { IRoute } from "@virc/virc-rebuild/dist/render-router/types";
 
 export interface IRenderFromConfig {
   routerCallback: Function;

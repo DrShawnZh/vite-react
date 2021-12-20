@@ -1,6 +1,6 @@
 {
-  "name": "@varc/rebuild",
-  "version": "0.0.2",
+  "name": "@virc/virc-rebuild",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "files": [
@@ -12,8 +12,12 @@
     "build": "rm -rf ./dist && rollup -c ./rollup.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "alittlehamster@163.com",
   "license": "ISC",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "@babel/preset-env": "^7.16.0",
     "@babel/preset-react": "^7.16.0",

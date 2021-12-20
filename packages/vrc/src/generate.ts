@@ -59,7 +59,7 @@ export default class GenerateCache {
         fs.writeFileSync(
           join(cachePath, "/root.tsx"),
           mustache.render(code, {
-            importRender: "varc/lib/index",
+            importRender: "virc/lib/index",
             importRoutes: JSON.stringify(formatRouter(routes, root)),
             rootEle: "root",
             history,
@@ -89,7 +89,7 @@ export default class GenerateCache {
     const { root } = this;
     this.cachePath = join(
       rootPath,
-      root === "dev" ? "/dev/src/.varc/" : "/src/.varc/"
+      root === "dev" ? "/dev/src/.virc/" : "/src/.virc/"
     );
   }
 }

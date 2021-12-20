@@ -27,7 +27,7 @@ const renderFromConfig = (renders?: T.IRenderFromConfig) => {
             hashPrefix: "prefix",
           },
         },
-        root: path.join(process.cwd(), "/src/.varc"),
+        root: path.join(process.cwd(), "/src/.virc"),
       };
     },
   };
