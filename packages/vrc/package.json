@@ -3,7 +3,7 @@
   "version": "0.0.5",
   "description": "",
   "main": "dist/index.js",
-  "type": "commonjs",
+  "type": "module",
   "files": [
     "bin",
     "dist",
@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build-bundle": "rm -rf ./dist && rollup -c rollup.config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "bin": {
     "virc": "bin/vrc.js"
@@ -29,6 +29,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-typescript": "^8.3.0",
+    "@types/jest": "^27.0.3",
     "@types/mustache": "^4.1.2",
     "@types/rimraf": "^3.0.2",
     "@vitejs/plugin-react": "^1.0.8",
@@ -46,5 +47,10 @@
     "vite": "^2.6.13",
     "vite-plugin-babel-import": "^2.0.5",
     "vite-plugin-style-import": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.3",
+    "babel-jest": "^27.4.5",
+    "ts-jest": "^27.1.2"
   }
 }
