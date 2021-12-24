@@ -10,7 +10,7 @@ export default {
     entryFileNames: `[name].js`,
     chunkFileNames: "dep-[hash].js",
     exports: "named",
-    format: "cjs",
+    format: "es",
     externalLiveBindings: false,
     freeze: false,
     sourcemap: true,

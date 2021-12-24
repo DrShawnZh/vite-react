@@ -1,23 +1,36 @@
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, useHistory } from "react-router-dom";
 import React, { ReactNode, useEffect, useState } from "react";
 import { render } from "react-dom";
+import * as T from "./types";
 
-const renderRoutes: React.FC = (props) => {
-  const {
-    route: { path, component, routes = [], redirect, ...restProps },
-  } = props;
+const ComponentInRouter: React.FC<{
+  // Component: React.ComponentClass | React.FC;
+  route: T.IRoute;
+}> = ({ children, route }) => {
+  useEffect(() => {
+    if (route.title) {
+      console.log(route.title, "title");
+      document.title = route.title;
+    }
+  }, []);
 
-  let Component: ReactNode;
+  return <>{children}</>;
+};
+
+const RoutesComponent: React.FC<{ route: T.IRoute }> = ({ route }) => {
+  const { path, component, routes = [], redirect, ...restProps } = route;
+
+  let Component: React.ComponentClass | React.FC;
 
   if (typeof component === "string") {
     // @ts-ignore
     Component = React.lazy(() => import(component + ".tsx"));
   }
 
-  console.log(Component, "comps");
-
   if (redirect) {
-    return <Redirect key={path} exact {...restProps} from={path} to={redirect} />;
+    return (
+      <Redirect key={path} exact {...restProps} from={path} to={redirect} />
+    );
   }
 
   if (!redirect && !component && routes.length > 0) {
@@ -30,11 +43,20 @@ const renderRoutes: React.FC = (props) => {
       path={path}
       {...restProps}
       render={(props) => {
+        console.log("object");
+
+        if (!Component) {
+          throw new Error(`path ${route.path} need components`);
+          return;
+        }
+
         return (
           <React.Suspense fallback={"loading"}>
-            <Component {...props}>
-              {routes.length > 0 && renderSwitch({ routes })}
-            </Component>
+            <ComponentInRouter route={route}>
+              <Component {...props}>
+                {routes.length > 0 && renderSwitch({ routes })}
+              </Component>
+            </ComponentInRouter>
           </React.Suspense>
         );
       }}
@@ -42,7 +64,7 @@ const renderRoutes: React.FC = (props) => {
   );
 };
 
-export const renderSwitch = (props) => {
+export const renderSwitch: React.FC<{ routes: T.IRoute[] }> = (props) => {
   const { routes } = props;
-  return <Switch>{routes.map((route) => renderRoutes({ route }))}</Switch>;
+  return <Switch>{routes.map((route) => RoutesComponent({ route }))}</Switch>;
 };
