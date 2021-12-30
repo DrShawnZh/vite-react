@@ -49,7 +49,10 @@ export default class GenerateCache {
     // log(chalk.green("writing root.tsx..."))
     const { root, cachePath } = that;
 
-    return async (config?: { history: string; routes: T.IRoute[] }) => {
+    return async (config?: {
+      history: string;
+      routes: Partial<T.IRoute>[];
+    }) => {
       const { history = "browser", routes = [] } = config;
 
       const tplPath = resolve(__dirname, "./tpl/client.tpl");
@@ -60,7 +63,7 @@ export default class GenerateCache {
           join(cachePath, "/root.tsx"),
           mustache.render(code, {
             importRender: "virc/lib/index",
-            importRoutes: JSON.stringify(formatRouter(routes, root)),
+            importRoutes: JSON.stringify(formatRouter(routes, root), null, 2),
             rootEle: "root",
             history,
           }),
@@ -94,7 +97,7 @@ export default class GenerateCache {
   }
 }
 
-const formatRouter = (routes: T.IRoute[], root: string) => {
+export const formatRouter = (routes: Partial<T.IRoute>[], root: string) => {
   const rootPath = root === "dev" ? "/dev/src" : "/src";
 
   routes.forEach((item) => {

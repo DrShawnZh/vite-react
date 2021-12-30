@@ -1,1 +1,6 @@
-export default [{ path: "/", component: "./index" }];
+export default [
+  { 
+    path: "/", 
+    component: "./index"
+  }
+];
