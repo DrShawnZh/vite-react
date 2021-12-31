@@ -5,19 +5,16 @@ import readLine from "readline";
 import rimraf from "rimraf";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { copyFiles } from "util";
+import { copyFiles } from "./util.js";
 
-console.log(process.env.NODE_ENV === "test");
 const pwd = process.cwd();
 const args = process.argv.slice(2);
 const [projectName] = args.length > 0 ? args : ["myApp"];
 
-(function core() {
-  let __dirname;
-  if (process.env.NODE_ENV !== "test") {
-    __dirname = dirname(fileURLToPath(import.meta.url));
-  }
+// test 注释__dirname
+let __dirname = dirname(fileURLToPath(import.meta.url));
 
+(function core() {
   console.log("创建项目文件夹：", chalk.green(projectName));
   console.log("在当前文件夹下新建文件夹", chalk.green(process.cwd()));
 
@@ -59,8 +56,10 @@ export function handleExit() {
 }
 
 export function rewriteName() {
-  fs.readFile(pwd + `/${projectName}/package.json`, "utf-8").then((content) => {
-    content.replace("test-react-app", projectName);
-    fs.writeFileSync(pwd + `/${projectName}/package.json`, content);
-  });
+  const content = fs.readFileSync(
+    pwd + `/${projectName}/package.json`,
+    "utf-8"
+  );
+  const newContent = content.replace("test-react-app", projectName);
+  fs.writeFileSync(pwd + `/${projectName}/package.json`, newContent);
 }
