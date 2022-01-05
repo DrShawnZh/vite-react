@@ -63,7 +63,13 @@ export default class GenerateCache {
           join(cachePath, "/root.tsx"),
           mustache.render(code, {
             importRender: "virc/lib/index",
-            importRoutes: JSON.stringify(formatRouter(routes, root), null, 2),
+            importRoutes: JSON.stringify(
+              formatRouter(routes, root),
+              null,
+              2
+            ).replace(/\"component\": (\"(.+?)\")/g, (global, m1, m2) => {
+              return `"component": ${m2.replace(/\^/g, '"')}`;
+            }),
             rootEle: "root",
             history,
           }),
@@ -102,14 +108,18 @@ export const formatRouter = (routes: Partial<T.IRoute>[], root: string) => {
 
   routes.forEach((item) => {
     if (item.component) {
-      let filePath = join(process.cwd(), rootPath, item.component.slice(2));
+      let filePath = join(
+        process.cwd(),
+        rootPath,
+        (item.component as string).slice(2)
+      );
       try {
         const stat = fs.lstatSync(filePath);
         if (stat.isDirectory()) {
-          item.component = filePath + "/index";
+          item.component = `React.lazy(() => import('${filePath}/index.tsx'))`;
         }
       } catch (e) {
-        item.component = filePath;
+        item.component = `React.lazy(() => import('${filePath}.tsx'))`;
       }
     }
 

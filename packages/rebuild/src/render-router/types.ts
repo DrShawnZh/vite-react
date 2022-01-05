@@ -1,7 +1,7 @@
 export interface IRoute {
   redirect: string;
   path: string;
-  component: string;
+  component: string | React.ComponentClass | React.FC;
   title: string;
   routes: IRoute[];
 }

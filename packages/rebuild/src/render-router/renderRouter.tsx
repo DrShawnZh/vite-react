@@ -20,12 +20,12 @@ const ComponentInRouter: React.FC<{
 const RoutesComponent: React.FC<{ route: T.IRoute }> = ({ route }) => {
   const { path, component, routes = [], redirect, ...restProps } = route;
 
-  let Component: React.ComponentClass | React.FC;
+  let Component: React.ComponentClass | React.FC | string = component;
 
-  if (typeof component === "string") {
-    // @ts-ignore
-    Component = React.lazy(() => import(component + ".tsx"));
-  }
+  // if (typeof component === "string") {
+  //   // @ts-ignore
+  //   Component = React.lazy(() => import(component + ".tsx"));
+  // }
 
   if (redirect) {
     return (
@@ -47,7 +47,6 @@ const RoutesComponent: React.FC<{ route: T.IRoute }> = ({ route }) => {
 
         if (!Component) {
           throw new Error(`path ${route.path} need components`);
-          return;
         }
 
         return (

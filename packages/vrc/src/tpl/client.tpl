@@ -1,4 +1,5 @@
 import { renderClient } from '{{{importRender}}}';
+import React from 'react';
 
 const routes = {{{importRoutes}}};
 

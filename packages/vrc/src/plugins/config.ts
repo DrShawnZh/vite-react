@@ -10,7 +10,7 @@ const renderFromConfig = (renders?: T.IRenderFromConfig) => {
       const { theme = {} } = config;
       const { routerCallback } = renders;
       routerCallback && routerCallback(config);
-
+      
       return {
         ...config,
         // 更改antd主题
@@ -28,6 +28,12 @@ const renderFromConfig = (renders?: T.IRenderFromConfig) => {
           },
         },
         root: path.join(process.cwd(), "/src/.virc"),
+        build: {
+          outDir:
+            config.build && config.build.outDir
+              ? config.build.outDir
+              : `../../dist`,
+        },
       };
     },
   };
