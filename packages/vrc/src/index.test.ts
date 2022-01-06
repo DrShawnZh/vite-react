@@ -1,6 +1,6 @@
 import customtheme from "./css";
 import fs from "fs-extra";
-import GenerateCache, { formatRouter } from "./generate";
+import GenerateCache, { formatRouter, firstToUpper } from "./generate";
 import rimraf from "rimraf";
 
 test("antd theme", () => {
@@ -27,11 +27,16 @@ test("routes", () => {
   ]);
 });
 
+test("to upper case", () => {
+  expect(firstToUpper("app-test")).toBe("Apptest");
+  expect(firstToUpper("app_test")).toBe("Apptest");
+});
+
 describe("generate", () => {
   const Gen = new GenerateCache("");
 
   afterAll(() => {
-    rimraf.sync(process.cwd() + "/src/.virc");
+    // rimraf.sync(process.cwd() + "/src/.virc");
   });
 
   test("generate html", () => {
@@ -46,7 +51,7 @@ describe("generate", () => {
       routes: [
         {
           path: "/",
-          component: "./index",
+          component: "@/pages/app/index",
         },
       ],
     });

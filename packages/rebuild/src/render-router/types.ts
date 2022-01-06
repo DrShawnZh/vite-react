@@ -7,7 +7,7 @@ export interface IRoute {
 }
 
 export interface IRouterConfig {
-  routes: IRoute[];
+  routes: Partial<IRoute>[];
   rootEle: string;
   history: "browser" | "hash";
 }

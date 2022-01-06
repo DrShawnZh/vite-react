@@ -58,18 +58,20 @@ export default class GenerateCache {
       const tplPath = resolve(__dirname, "./tpl/client.tpl");
       const code = fs.readFileSync(tplPath, "utf-8");
 
+      const { routes: fomattedRoutes, imports } = formatRouter(routes, root);
+
       try {
         fs.writeFileSync(
           join(cachePath, "/root.tsx"),
           mustache.render(code, {
+            imports: imports.join(";\n"),
             importRender: "virc/lib/index",
-            importRoutes: JSON.stringify(
-              formatRouter(routes, root),
-              null,
-              2
-            ).replace(/\"component\": (\"(.+?)\")/g, (global, m1, m2) => {
-              return `"component": ${m2.replace(/\^/g, '"')}`;
-            }),
+            importRoutes: JSON.stringify(fomattedRoutes, null, 2).replace(
+              /\"component\": (\"(.+?)\")/g,
+              (global, m1, m2) => {
+                return `"component": ${m2.replace(/\^/g, '"')}`;
+              }
+            ),
             rootEle: "root",
             history,
           }),
@@ -103,7 +105,11 @@ export default class GenerateCache {
   }
 }
 
-export const formatRouter = (routes: Partial<T.IRoute>[], root: string) => {
+export const formatRouter = (
+  routes: Partial<T.IRoute>[],
+  root: string,
+  imports = []
+) => {
   const rootPath = root === "dev" ? "/dev/src" : "/src";
 
   routes.forEach((item) => {
@@ -113,19 +119,33 @@ export const formatRouter = (routes: Partial<T.IRoute>[], root: string) => {
         rootPath,
         (item.component as string).slice(2)
       );
+      const compsName = (item.component as string)
+        .slice(2)
+        .split("/")
+        .map((it) => firstToUpper(it))
+        .join("");
       try {
         const stat = fs.lstatSync(filePath);
         if (stat.isDirectory()) {
-          item.component = `React.lazy(() => import('${filePath}/index.tsx'))`;
+          imports.push(`import ${compsName} from "${item.component}"`);
+          // item.component = `React.lazy(() => import('${filePath}/index'))`;
+          item.component = compsName;
         }
       } catch (e) {
-        item.component = `React.lazy(() => import('${filePath}.tsx'))`;
+        imports.push(`import ${compsName} from "${item.component}"`);
+        // item.component = `React.lazy(() => import('${filePath}'))`;
+        item.component = compsName;
       }
     }
 
     if (item.routes && item.routes.length > 0) {
-      formatRouter(item.routes, root);
+      formatRouter(item.routes, root, imports);
     }
   });
-  return routes;
+  return { routes, imports };
 };
+
+export function firstToUpper(s: string) {
+  const formatedS = s.replace(/(-|_|@)/g, "");
+  return formatedS.slice(0, 1).toUpperCase() + formatedS.slice(1);
+}

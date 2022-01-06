@@ -5,7 +5,7 @@ import * as T from "./types";
 
 const ComponentInRouter: React.FC<{
   // Component: React.ComponentClass | React.FC;
-  route: T.IRoute;
+  route: Partial<T.IRoute>;
 }> = ({ children, route }) => {
   useEffect(() => {
     if (route.title) {
@@ -17,7 +17,7 @@ const ComponentInRouter: React.FC<{
   return <>{children}</>;
 };
 
-const RoutesComponent: React.FC<{ route: T.IRoute }> = ({ route }) => {
+const RoutesComponent: React.FC<{ route: Partial<T.IRoute> }> = ({ route }) => {
   const { path, component, routes = [], redirect, ...restProps } = route;
 
   let Component: React.ComponentClass | React.FC | string = component;
@@ -50,20 +50,26 @@ const RoutesComponent: React.FC<{ route: T.IRoute }> = ({ route }) => {
         }
 
         return (
-          <React.Suspense fallback={"loading"}>
-            <ComponentInRouter route={route}>
-              <Component {...props}>
-                {routes.length > 0 && renderSwitch({ routes })}
-              </Component>
-            </ComponentInRouter>
-          </React.Suspense>
+          <ComponentInRouter route={route}>
+            <Component {...props}>
+              {routes.length > 0 && renderSwitch({ routes })}
+            </Component>
+          </ComponentInRouter>
         );
       }}
     ></Route>
   );
 };
 
-export const renderSwitch: React.FC<{ routes: T.IRoute[] }> = (props) => {
+export const renderSwitch: React.FC<{ routes: Partial<T.IRoute>[] }> = (
+  props
+) => {
   const { routes } = props;
-  return <Switch>{routes.map((route) => RoutesComponent({ route }))}</Switch>;
+  return (
+    <Switch>
+      {/* <React.Suspense fallback={<div>loading</div>}> */}
+      {routes.map((route) => RoutesComponent({ route }))}
+      {/* </React.Suspense> */}
+    </Switch>
+  );
 };
