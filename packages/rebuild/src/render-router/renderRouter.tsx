@@ -1,6 +1,5 @@
-import { Switch, Route, Redirect, useHistory } from "react-router-dom";
-import React, { ReactNode, useEffect, useState } from "react";
-import { render } from "react-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
+import React, { useEffect } from "react";
 import * as T from "./types";
 
 const ComponentInRouter: React.FC<{
@@ -9,7 +8,6 @@ const ComponentInRouter: React.FC<{
 }> = ({ children, route }) => {
   useEffect(() => {
     if (route.title) {
-      console.log(route.title, "title");
       document.title = route.title;
     }
   }, []);
