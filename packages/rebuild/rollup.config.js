@@ -22,6 +22,7 @@ export default [
       externalLiveBindings: false,
       freeze: false,
       sourcemap: true,
+      name: "index.esm",
     },
     plugins: [
       resolve({ extensions: [".js", ".jsx", ".ts", ".tsx"] }),
@@ -43,28 +44,13 @@ export default [
         },
       }),
     ],
-    /**
-     * import dayjsGenerateConfig from 'rc-picker/es/generate/dayjs';
-import generateCalendar from 'antd/es/calendar/generateCalendar';
-import 'antd/es/calendar/style';
-import dayjsGenerateConfig from "rc-picker/es/generate/dayjs";
-import generatePicker from "antd/es/date-picker/generatePicker";
-import "antd/es/date-picker/style/index";
-     */
-    external: [
-      ...Object.keys(require("./package.json").dependencies),
-      "rc-picker/es/generate/dayjs",
-      "antd/es/calendar/generateCalendar",
-      "antd/es/calendar/style",
-      "antd/es/date-picker/generatePicker",
-      "antd/es/date-picker/style/index",
-    ],
+    external: [...Object.keys(require("./package.json").peerDependencies)],
   },
   {
     input: { index: path.resolve(__dirname, "./src/render-router/index.tsx") },
     output: {
       dir: path.resolve(__dirname, "dist"),
-      name: "index",
+      name: "index.esm",
       entryFileNames: `render-router/[name].js`,
       format: "es",
       sourcemap: true,
@@ -75,10 +61,15 @@ import "antd/es/date-picker/style/index";
         tsconfig: "./tsconfig.json", // 导入本地ts配置
         extensions: [".js", ".ts"],
       }),
+      babel({
+        presets: ["@babel/preset-env", "@babel/preset-react"],
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+        exclude: /node_modules/,
+      }),
       commonjs({
         include: /node_modules/,
       }),
     ],
-    external: [...Object.keys(require("./package.json").dependencies)],
+    external: [...Object.keys(require("./package.json").peerDependencies)],
   },
 ];

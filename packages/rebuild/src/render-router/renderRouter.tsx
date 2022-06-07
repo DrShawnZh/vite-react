@@ -20,38 +20,30 @@ const RoutesComponent: React.FC<{ route: Partial<T.IRoute> }> = ({ route }) => {
 
   let Component: React.ComponentClass | React.FC | string = component;
 
-  // if (typeof component === "string") {
-  //   // @ts-ignore
-  //   Component = React.lazy(() => import(component + ".tsx"));
-  // }
-
   if (redirect) {
     return (
       <Redirect key={path} exact {...restProps} from={path} to={redirect} />
     );
   }
 
-  if (!redirect && !component && routes.length > 0) {
-    return renderSwitch({ routes });
-  }
-
   return (
     <Route
-      key={path}
       path={path}
       {...restProps}
       render={(props) => {
-        console.log("object");
-
-        if (!Component) {
+        if (!component && routes.length > 0) {
+          return renderSwitch({ routes });
+        } else if (!component && routes.length === 0) {
           throw new Error(`path ${route.path} need components`);
         }
 
         return (
           <ComponentInRouter route={route}>
-            <Component {...props}>
-              {routes.length > 0 && renderSwitch({ routes })}
-            </Component>
+            <React.Suspense fallback={<div>loading</div>}>
+              <Component {...props}>
+                {routes.length > 0 && renderSwitch({ routes })}
+              </Component>
+            </React.Suspense>
           </ComponentInRouter>
         );
       }}
@@ -63,11 +55,5 @@ export const renderSwitch: React.FC<{ routes: Partial<T.IRoute>[] }> = (
   props
 ) => {
   const { routes } = props;
-  return (
-    <Switch>
-      {/* <React.Suspense fallback={<div>loading</div>}> */}
-      {routes.map((route) => RoutesComponent({ route }))}
-      {/* </React.Suspense> */}
-    </Switch>
-  );
+  return <Switch>{routes.map((route) => RoutesComponent({ route }))}</Switch>;
 };

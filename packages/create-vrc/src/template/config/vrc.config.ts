@@ -1,6 +1,7 @@
 import routes from "./route.config";
 import path from "path";
 import theme from "./theme.config";
+import legacy from "@vitejs/plugin-legacy";
 
 export default {
   routes,
@@ -13,13 +14,19 @@ export default {
       "@": path.resolve(__dirname, "../src"),
     },
   },
-  server: {
-    proxy: {
-      "/tenant": {
-        // target: "http://172.23.0.102:9200/",
-        target: "http://172.22.6.3:9200/",
-        changeOrigin: true,
-      },
+  build: {
+    target: "es2015",
+    emptyOutDir: true,
+    manifest: true,
+    optimizeDeps: {
+      include: [""],
+    },
+    rollupOptions: {
+      plugins: [
+        legacy({
+          targets: ["defaults", "not IE 11"],
+        }),
+      ],
     },
   },
 };

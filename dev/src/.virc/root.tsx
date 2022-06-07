@@ -1,12 +1,13 @@
-import { renderClient } from 'virc/lib/index';
+import { renderClient } from '@virc/virc-rebuild/dist/index.js';
+import React from 'react';
+
+import Index from "./index"
 
 const routes = [
   {
     "path": "/",
-    "component": "/Users/zhangxiang/projects/vite-react/dev/src/index"
+    "component": Index
   }
 ];
 
 export default renderClient({routes, history: 'browser', rootEle: "root"})
-
-

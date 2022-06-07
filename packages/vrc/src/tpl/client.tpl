@@ -1,4 +1,4 @@
-import { renderClient } from '@virc/virc-rebuild/dist/render-router';
+import { renderClient } from '@virc/virc-rebuild/lib/render-router/index.js';
 import React from 'react';
 
 {{{imports}}}

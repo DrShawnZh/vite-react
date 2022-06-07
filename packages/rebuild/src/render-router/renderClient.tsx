@@ -1,10 +1,10 @@
-import { BrowserRouter, HashRouter } from "react-router-dom";
+import { BrowserRouter, HashRouter, Router } from "react-router-dom";
 import { render } from "react-dom";
 import * as T from "./types";
 import { renderSwitch } from "./renderRouter";
 import React from "react";
 
-export const renderClient = (config: T.IRouterConfig) => {
+export default function renderClient(config: T.IRouterConfig) {
   const { routes, rootEle = "root", history = "browser" } = config;
 
   if (history === "browser") {
@@ -18,4 +18,4 @@ export const renderClient = (config: T.IRouterConfig) => {
       document.getElementById(rootEle)
     );
   }
-};
+}

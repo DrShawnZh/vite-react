@@ -46,19 +46,21 @@ export default class GenerateCache {
   }
 
   generateClient(that: GenerateCache) {
-    // log(chalk.green("writing root.tsx..."))
     const { root, cachePath } = that;
 
     return async (config?: {
       history: string;
       routes: Partial<T.IRoute>[];
+      dynamic: boolean;
     }) => {
-      const { history = "browser", routes = [] } = config;
+      const { history = "browser", routes = [], dynamic } = config;
 
       const tplPath = resolve(__dirname, "./tpl/client.tpl");
       const code = fs.readFileSync(tplPath, "utf-8");
 
-      const { routes: fomattedRoutes, imports } = formatRouter(routes, root);
+      const { routes: fomattedRoutes, imports } = dynamic
+        ? fomatDynamicRouter(routes, root)
+        : formatRouter(routes, root);
 
       try {
         fs.writeFileSync(
@@ -105,6 +107,13 @@ export default class GenerateCache {
   }
 }
 
+/**
+ * trans router config to component router
+ * @param routes
+ * @param root
+ * @param imports
+ * @returns
+ */
 export const formatRouter = (
   routes: Partial<T.IRoute>[],
   root: string,
@@ -128,12 +137,10 @@ export const formatRouter = (
         const stat = fs.lstatSync(filePath);
         if (stat.isDirectory()) {
           imports.push(`import ${compsName} from "${item.component}"`);
-          // item.component = `React.lazy(() => import('${filePath}/index'))`;
           item.component = compsName;
         }
       } catch (e) {
         imports.push(`import ${compsName} from "${item.component}"`);
-        // item.component = `React.lazy(() => import('${filePath}'))`;
         item.component = compsName;
       }
     }
@@ -143,6 +150,37 @@ export const formatRouter = (
     }
   });
   return { routes, imports };
+};
+
+// dynamic import router config
+export const fomatDynamicRouter = (
+  routes: Partial<T.IRoute>[],
+  root: string
+) => {
+  const rootPath = root === "dev" ? "/dev/src" : "/src";
+
+  routes.forEach((item) => {
+    if (item.component) {
+      let filePath = join(
+        process.cwd(),
+        rootPath,
+        (item.component as string).slice(2)
+      );
+      try {
+        const stat = fs.lstatSync(filePath);
+        if (stat.isDirectory()) {
+          item.component = `React.lazy(() => import('${filePath}/index'))`;
+        }
+      } catch (e) {
+        item.component = `React.lazy(() => import('${filePath}'))`;
+      }
+    }
+
+    if (item.routes && item.routes.length > 0) {
+      fomatDynamicRouter(item.routes, root);
+    }
+  });
+  return { routes, imports: [] };
 };
 
 export function firstToUpper(s: string) {

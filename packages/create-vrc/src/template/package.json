@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "virc",
+    "build": "virc build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,7 +13,8 @@
   "dependencies": {
     "@loadable/component": "^5.10.1",
     "@types/js-cookie": "^2.2.5",
-    "@virc/virc-rebuild": "0.0.4",
+    "@virc/virc-rebuild": "0.0.6",
+    "@vitejs/plugin-legacy": "^1.8.2",
     "antd": "^4.17.1",
     "dayjs": "^1.10.7",
     "js-cookie": "^2.2.1",
@@ -29,14 +31,14 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "typescript": "^4.5.2",
-    "umi-request": "^1.4.0",
-    "vite": "^2.6.14"
+    "umi-request": "^1.4.0"
   },
   "devDependencies": {
     "cac": "^6.7.12",
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
-    "virc": "0.0.4"
+    "typescript": "^4.5.2",
+    "virc": "0.0.7",
+    "vite": "^2.6.14"
   }
 }

@@ -14,17 +14,42 @@ test("routes", () => {
       [
         {
           path: "/",
-          component: "./index",
+          component: "@/pages/app/index",
         },
       ],
       "dev"
     )
-  ).toEqual([
-    {
-      path: "/",
-      component: process.cwd() + "/dev/src/index",
-    },
-  ]);
+  ).toEqual({
+    routes: [
+      {
+        path: "/",
+        component: "PagesAppIndex",
+      },
+    ],
+    imports: [`import PagesAppIndex from "@/pages/app/index"`],
+  });
+});
+
+test("dynamic routes", () => {
+  expect(
+    formatRouter(
+      [
+        {
+          path: "/",
+          component: "@/pages/app/index",
+        },
+      ],
+      "dev"
+    )
+  ).toEqual({
+    routes: [
+      {
+        path: "/",
+        component: "PagesAppIndex",
+      },
+    ],
+    imports: [`import PagesAppIndex from "@/pages/app/index"`],
+  });
 });
 
 test("to upper case", () => {
@@ -36,7 +61,7 @@ describe("generate", () => {
   const Gen = new GenerateCache("");
 
   afterAll(() => {
-    // rimraf.sync(process.cwd() + "/src/.virc");
+    rimraf.sync(process.cwd() + "/src/.virc");
   });
 
   test("generate html", () => {
@@ -54,17 +79,54 @@ describe("generate", () => {
           component: "@/pages/app/index",
         },
       ],
+      dynamic: false,
     });
     const clientPath = process.cwd() + "/src/.virc/root.tsx";
     expect(fs.existsSync(clientPath)).toBeTruthy();
     expect(fs.readFileSync(clientPath, "utf-8")).toBe(
       `
 import { renderClient } from 'virc/lib/index';
+import React from 'react';
+
+import PagesAppIndex from "@/pages/app/index"
 
 const routes = [
   {
     "path": "/",
-    "component": "/Users/zhangxiang/projects/vite-react/packages/vrc/src/index"
+    "component": PagesAppIndex
+  }
+];
+
+export default renderClient({routes, history: 'browser', rootEle: "root"})
+    `.trim()
+    );
+  });
+
+  test("generate dynamic client.ts", () => {
+    const generateCLient = Gen.generateClient(Gen);
+    generateCLient({
+      history: "browser",
+      routes: [
+        {
+          path: "/",
+          component: "@/pages/app/index",
+        },
+      ],
+      dynamic: true,
+    });
+    const clientPath = process.cwd() + "/src/.virc/root.tsx";
+    expect(fs.existsSync(clientPath)).toBeTruthy();
+    expect(fs.readFileSync(clientPath, "utf-8")).toBe(
+      `
+import { renderClient } from 'virc/lib/index';
+import React from 'react';
+
+
+
+const routes = [
+  {
+    "path": "/",
+    "component": React.lazy(() => import('/Users/zhangxiang/projects/vite-react/packages/vrc/src/pages/app/index'))
   }
 ];
 
