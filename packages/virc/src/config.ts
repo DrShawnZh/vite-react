@@ -54,11 +54,11 @@ export function splitViteConfig(configPath: string = "", root?: string) {
     const basePath = process.cwd();
     const jsConfig = path.resolve(
       basePath,
-      root === "dev" ? "dev/config/vrc.config.js" : "config/vrc.config.js"
+      root === "dev" ? "dev/config/virc.config.js" : "config/virc.config.js"
     );
     const tsConfig = path.resolve(
       basePath,
-      root === "dev" ? "dev/config/vrc.config.ts" : "config/vrc.config.ts"
+      root === "dev" ? "dev/config/virc.config.ts" : "config/virc.config.ts"
     );
 
     if (fs.existsSync(jsConfig)) {
